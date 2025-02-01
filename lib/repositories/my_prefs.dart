@@ -1,3 +1,4 @@
+import 'package:location_tracker/repositories/geofence.dart';
 import 'package:location_tracker/repositories/todos.dart';
 import 'package:location_tracker/repositories/users.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,4 +12,5 @@ class MyPrefs {
 
   static TodoRepository get todoRepo => TodoRepository(_prefs!);
   static UsersRepository get userRepo => UsersRepository(_prefs!);
+  static GeoFenceRepository get geoRepo => GeoFenceRepository(_prefs!);
 }

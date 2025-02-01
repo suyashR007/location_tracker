@@ -47,7 +47,6 @@ class GlobalController extends GetxController {
     final response = await _service.getUsers();
     response.fold(
       (l) {
-        print(l.toString());
         setUserRequestState(RequestState.error);
       },
       (r) {

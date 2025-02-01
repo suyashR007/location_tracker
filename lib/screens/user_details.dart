@@ -14,13 +14,11 @@ class UserDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('User Details '),
+        title: const Text('User Details'),
       ),
       body: GetBuilder<UserDetailsController>(
         builder: (controller) => Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 4.w,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 4.w),
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -108,10 +106,37 @@ class UserDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownButton<String>(
+                      value: controller.currentFilter,
+                      items: <String>['All', 'Completed', 'Not Completed']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          controller.setFilter(newValue);
+                        }
+                      },
+                    ),
+                    ElevatedButton(
+                      onPressed: () => controller.sortTodos(),
+                      child: Icon(Icons.sort),
+                    ),
+                  ],
+                ),
+              ),
               SliverList.builder(
-                  itemCount: controller.userTodoList.length,
-                  itemBuilder: (context, index) =>
-                      TodoCard(model: controller.userTodoList[index]))
+                itemCount: controller.filteredTodoList.length,
+                itemBuilder: (context, index) =>
+                    TodoCard(model: controller.filteredTodoList[index]),
+              ),
             ],
           ),
         ),

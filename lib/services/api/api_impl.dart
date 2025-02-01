@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'dart:io' as io;
 import 'package:location_tracker/constants/endpoints.dart';
 import 'package:location_tracker/constants/var_type.dart';
 import 'package:location_tracker/models/todo_model.dart';
