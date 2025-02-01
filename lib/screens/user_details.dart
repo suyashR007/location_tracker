@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:location_tracker/constants/text_style.dart';
 import 'package:location_tracker/controllers/user_details.dart';
 import 'package:location_tracker/widgets/card/todo_card.dart';
+import 'package:location_tracker/widgets/card/user_location.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class UserDetailsScreen extends StatelessWidget {
@@ -93,6 +95,17 @@ class UserDetailsScreen extends StatelessWidget {
                       ],
                     ),
                   ],
+                ),
+              ),
+              SliverToBoxAdapter(child: UserLocationViewCard()),
+              SliverToBoxAdapter(
+                child: Text(
+                  'Task List',
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
               SliverList.builder(

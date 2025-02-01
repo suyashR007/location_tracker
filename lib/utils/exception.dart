@@ -17,6 +17,10 @@ class NetworkException extends ApiException {
   NetworkException(super.message);
 }
 
+class NoInternetConnection extends ApiException {
+  NoInternetConnection(super.message);
+}
+
 class UnknownException extends ApiException {
   UnknownException(super.message);
 }

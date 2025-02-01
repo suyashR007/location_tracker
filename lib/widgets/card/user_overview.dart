@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:location_tracker/constants/text_style.dart';
-import 'package:location_tracker/controllers/home.dart';
+import 'package:location_tracker/controllers/global.dart';
 import 'package:location_tracker/models/user_model/user_model.dart';
 import 'package:location_tracker/routers/routers.dart';
 import 'package:location_tracker/widgets/button/primary.dart';
@@ -16,7 +16,7 @@ class UserOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeController = Get.find<HomeController>();
+    final homeController = Get.find<GlobalController>();
     return Card(
       margin: EdgeInsets.symmetric(vertical: 1.h),
       child: Padding(

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io' as io;
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart' as getx;
 import 'package:location_tracker/constants/endpoints.dart';
+import 'package:location_tracker/repositories/my_prefs.dart';
 import 'package:location_tracker/utils/exception.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,53 +13,11 @@ enum LoggerType { d, e, i, f, t, w }
 
 class Helpers {
   static http.Client? _client;
-  static SharedPreferences? _prefs;
 
   static setHelpers({required SharedPreferences prefs}) {
-    _prefs = prefs;
+    MyPrefs.setPrefs(prefs: prefs);
     _client = http.Client();
   }
-
-  // static String? getUserToken() {
-  //   return _prefs!.getString(AppKeys.authToken);
-  // }
-
-  // static Future<bool> setUserToken(String token) async {
-  //   bool check = await _prefs!.setString(
-  //     AppKeys.authToken,
-  //     token,
-  //   );
-  //   if (check) {
-  //     getx.Get.find<GlobalController>().isLoggedIn.value =
-  //         Helpers.getUserToken() != null;
-  //   }
-  //   return check;
-  // }
-
-  // static Future<bool> setOnboardedUser(bool value) async {
-  //   return await _prefs!.setBool(AppKeys.onboardedUser, value);
-  // }
-
-  // static String? getUserInformation() {
-  //   return _prefs!.getString(AppKeys.userDetails);
-  // }
-
-  // static bool? onboardedUser() {
-  //   return _prefs!.getBool(AppKeys.onboardedUser);
-  // }
-
-  // static Future<bool> setUserInformation(UserModel model) async {
-  //   return await _prefs!.setString(
-  //     AppKeys.userDetails,
-  //     model.toJson(),
-  //   );
-  // }
-
-  // static void clearUserToken() {
-  //   _prefs!.remove(AppKeys.authToken);
-  //   _prefs!.remove(AppKeys.userDetails);
-  //   _prefs!.clear();
-  // }
 
   static void logger({
     required LoggerType type,
@@ -108,6 +66,8 @@ class Helpers {
         'Content-Type':
             encoded ? 'application/x-www-form-urlencoded' : 'application/json',
       };
+
+      logger(type: LoggerType.i, message: 'Sending $type request to $uri');
 
       switch (type) {
         case RequestType.get:
@@ -164,6 +124,10 @@ class Helpers {
           break;
       }
 
+      logger(
+          type: LoggerType.i,
+          message: 'Received response: ${response.statusCode}');
+
       if (response.statusCode == 200 || response.statusCode == 202) {
         return jsonDecode(response.body) as List<dynamic>;
       } else if (response.statusCode == 400 ||
@@ -180,11 +144,16 @@ class Helpers {
         );
       }
     } on ServerException catch (e) {
+      logger(type: LoggerType.e, message: 'ServerException: ${e.message}');
       throw ServerException(message: e.message, code: e.code);
     } on io.SocketException {
-      throw ServerException(message: "No Internet", code: 0);
+      logger(
+        type: LoggerType.e,
+        message: "No Internet",
+      );
+      throw NoInternetConnection("No Internet connection");
     } catch (e) {
-      print(e.toString());
+      logger(type: LoggerType.e, message: e.toString());
       throw ServerException(
         message: e.toString(),
         code: 500,

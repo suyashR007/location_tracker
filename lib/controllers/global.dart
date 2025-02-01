@@ -2,18 +2,25 @@ import 'package:get/get.dart';
 import 'package:location_tracker/constants/enums.dart';
 import 'package:location_tracker/models/todo_model.dart';
 import 'package:location_tracker/models/user_model/user_model.dart';
-import 'package:location_tracker/services/api.dart';
-import 'package:location_tracker/services/api_impl.dart';
+import 'package:location_tracker/services/api/api.dart';
+import 'package:location_tracker/services/api/api_impl.dart';
+import 'package:location_tracker/services/my_locator.dart';
 
-class HomeController extends GetxController {
-  HomeController() {
+class GlobalController extends GetxController {
+  GlobalController() {
     init();
   }
   final ApiService _service = ApiServiceImpl();
+  bool userLocationPermission = false;
 
   init() async {
-    await requestTodos();
-    await requestUsers();
+    await requestPermission();
+    await fetchTodos();
+    await fetchUsers();
+  }
+
+  Future<void> requestPermission() async {
+    userLocationPermission = await MyLocator.handleLocationPermission();
   }
 
   late List<UserModel> userList;
@@ -35,16 +42,18 @@ class HomeController extends GetxController {
     update();
   }
 
-  Future<void> requestUsers() async {
+  Future<void> fetchUsers() async {
     setUserRequestState(RequestState.loading);
     final response = await _service.getUsers();
     response.fold(
       (l) {
+        print(l.toString());
         setUserRequestState(RequestState.error);
       },
       (r) {
         userList = [];
         userList = r!;
+
         setUserRequestState(RequestState.completed);
       },
     );
@@ -57,7 +66,7 @@ class HomeController extends GetxController {
         .toList();
   }
 
-  Future<void> requestTodos() async {
+  Future<void> fetchTodos() async {
     setTodoRequestState(RequestState.loading);
     final response = await _service.getTodos();
     response.fold(
