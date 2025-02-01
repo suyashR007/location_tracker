@@ -13,22 +13,27 @@ The project is organized into several key directories and files:
   - **controllers/**: Contains the business logic of the application. Controllers manage the state and handle user interactions.
     - `global.dart`: Manages global state and user permissions.
     - `user_details.dart`: Handles user-specific data and todo lists.
+    - `map.dart`: Manages the logic for the map overview and geofencing.
   - **models/**: Defines the data structures used in the application.
     - `todo_model.dart`: Represents a todo item.
     - `user_model.dart`: Represents a user.
+    - `geofence.dart`: Represents a geofence model.
+    - `polygon.dart`: Represents a polygon used for geofencing.
   - **routers/**: Manages the routing of the application.
     - `bindings.dart`: Defines the dependencies for different screens.
     - `router.dart`: Contains the routes for navigation.
   - **screens/**: Contains the UI components of the application.
-    - `map_overview.dart`: Displays the map and user location.
+    - `map_overview.dart`: Displays the map and allows users to create geofences.
     - `user_details.dart`: Shows user details and their todo list.
   - **services/**: Contains services for handling external functionalities.
     - `my_locator.dart`: Manages location services.
     - `my_permission.dart`: Handles permission requests.
+  - **repositories/**: Contains classes for data persistence and retrieval.
+    - `my_prefs.dart`: Manages shared preferences for storing user data.
   - **widgets/**: Contains reusable UI components.
     - `button/primary.dart`: Defines a primary button widget.
     - `card/todo_card.dart`: Displays a todo item.
-    - `card/user_overview.dart`: Displays user information.
+    - `card/user_location.dart`: Displays user location information.
 
 - **android/**: Contains Android-specific configurations and files.
 - **ios/**: Contains iOS-specific configurations and files.
@@ -42,7 +47,7 @@ The architecture of the **Location Tracker** application follows the **Model-Vie
 1. **Model**:
 
    - Represents the data and business logic of the application.
-   - In this project, models like `UserModel` and `TodoModel` define the structure of user and todo data, respectively.
+   - In this project, models like `UserModel`, `TodoModel`, and `GeofenceModel` define the structure of user, todo, and geofence data, respectively.
 
 2. **View**:
 
@@ -51,7 +56,7 @@ The architecture of the **Location Tracker** application follows the **Model-Vie
 
 3. **Controller**:
    - Acts as an intermediary between the Model and the View.
-   - Controllers like `UserDetailsController` and `GlobalController` manage the state of the application, handle user input, and update the view accordingly.
+   - Controllers like `UserDetailsController`, `GlobalController`, and `MapScreenController` manage the state of the application, handle user input, and update the view accordingly.
 
 ### Key Components
 
@@ -59,6 +64,10 @@ The architecture of the **Location Tracker** application follows the **Model-Vie
 - **Routing**: The `routers` directory manages navigation between different screens, ensuring a smooth user experience.
 - **Services**: The `services` directory contains classes that handle external functionalities, such as location services and API calls.
 - **Widgets**: The `widgets` directory contains reusable UI components that can be used across different screens, promoting code reusability and maintainability.
+
+### Geofencing Feature
+
+The application includes a geofencing feature that allows users to create geofences on the map. Users can tap on the map to define the corners of the geofence, which is then displayed visually. The geofence can be saved for later use.
 
 3. **Set Up Permissions**:
 
